@@ -1,0 +1,32 @@
+---
+title: "Summary of Bayesian statistical inference of the loglogistic model with interval-censored lifetime data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+
+We try to apply Bayesian approach by employing numerical apporximations from Lindley (1980) and Tierney & Kadane (1986) on survival data which are considered interval-censored. We have considered only a parametric approach assuming the survival data follows a loglogistic distribution model.
+
+
+### Loglogistic information
+
+Cumulative distribution
+$$ F(t, \alpha, \beta) = [1 + (\frac{t}{\alpha})^{-\beta}]^{-1} $$
+
+Probability density function
+$$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}(\frac{t}{\alpha})^{\beta-1}[1 + (\frac{t}{\alpha})^{-\beta}]^{-2} $$
+
+### Bayesian estimation of the unknown parameters
+
+Suppose we have some information on the parameters $\alpha$ and $\beta$ as priori. since both parameters of hte loglogistic model are positive and greater than zero, we assume $\alpha$ and $\beta$ have the following gamma prior distributions:
+
+$$ \pi(\alpha) \propto \alpha^{a-1}exp(-\alpha b) $$
+$$ \pi(\beta) \propto \beta^{c-1}exp(-\beta d) $$
+
+
+
+
