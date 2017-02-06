@@ -15,18 +15,18 @@ We try to apply Bayesian approach by employing numerical apporximations from Lin
 ### Loglogistic information
 
 Cumulative distribution
-$$ F(t, \alpha, \beta) = [1 + (\frac{t}{\alpha})^{-\beta}]^{-1} $$
+$$ F(t, \alpha, \beta) = \Big[1 + (\frac{t}{\alpha})^{-\beta}\Big]^{-1} $$
 
 Probability density function
-$$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}(\frac{t}{\alpha})^{\beta-1}[1 + (\frac{t}{\alpha})^{-\beta}]^{-2} $$
+$$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}(\frac{t}{\alpha})^{\beta-1}\Big[1 + (\frac{t}{\alpha})^{-\beta}\Big]^{-2} $$
 
 ### Bayesian estimation of the unknown parameters
 
 Suppose we have some information on the parameters $\alpha$ and $\beta$ as priori. since both parameters of hte loglogistic model are positive and greater than zero, we assume $\alpha$ and $\beta$ have the following gamma prior distributions:
 
-$$ \pi(\alpha) \propto \alpha^{a-1}exp(-\alpha b) $$
-$$ \pi(\beta) \propto \beta^{c-1}exp(-\beta d) $$
+$$ \pi(\alpha) \propto \alpha^{\ a-1}exp(-\alpha\ b) $$
+$$ \pi(\beta) \propto \beta^{\ c-1}exp(-\beta\ d) $$
 
+### Lindley (1980) numerical approximation approach
 
-
-
+### Tierney & Kadane (1986) numerical approximation approahc
