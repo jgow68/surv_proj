@@ -15,10 +15,10 @@ We try to apply Bayesian approach by employing numerical apporximations from Lin
 ### Loglogistic information
 
 Cumulative distribution
-$$ F(t, \alpha, \beta) = \Big[1 + (\frac{t}{\alpha})^{-\beta}\Big]^{-1} $$
+$$ F(t, \alpha, \beta) = \Big[1 + \bigg(\frac{t}{\alpha}\bigg)^{-\beta}\Big]^{-1} $$
 
 Probability density function
-$$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}(\frac{t}{\alpha})^{\beta-1}\Big[1 + (\frac{t}{\alpha})^{-\beta}\Big]^{-2} $$
+$$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}\bigg(\frac{t}{\alpha}\bigg)^{\beta-1}\Big[1 + \bigg(\frac{t}{\alpha}\bigg)^{-\beta}\Big]^{-2} $$
 
 ### Bayesian estimation of the unknown parameters
 
