@@ -1,10 +1,16 @@
 ---
-title: "Summary of Bayesian statistical inference of the loglogistic model with interval-censored lifetime data"
-output: html_document
+title: Summary of Bayesian statistical inference of the loglogistic model with interval-censored
+  lifetime data
+output:
+  html_document: default
+  pdf_document: default
+header includes:
+  - \usepackage{amsmath, amsthm, amssymb}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## Summary
@@ -14,10 +20,16 @@ We try to apply Bayesian approach by employing numerical apporximations from Lin
 
 ### Loglogistic information
 
-Cumulative distribution
-$$ F(t, \alpha, \beta) = \Big[1 + \bigg(\frac{t}{\alpha}\bigg)^{-\beta}\Big]^{-1} $$
+Cumulative distribution function
+
+
+\begin{align}
+F(t, \alpha, \beta) = \Big[1 + \bigg(\frac{t}{\alpha}\bigg)^{-\beta}\Big]^{-1} 
+\end{align}
+
 
 Probability density function
+
 $$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}\bigg(\frac{t}{\alpha}\bigg)^{\beta-1}\Big[1 + \bigg(\frac{t}{\alpha}\bigg)^{-\beta}\Big]^{-2} $$
 
 ### Bayesian estimation of the unknown parameters
@@ -25,8 +37,69 @@ $$ f(t, \alpha, \beta) = \frac{\beta}{\alpha}\bigg(\frac{t}{\alpha}\bigg)^{\beta
 Suppose we have some information on the parameters $\alpha$ and $\beta$ as priori. since both parameters of hte loglogistic model are positive and greater than zero, we assume $\alpha$ and $\beta$ have the following gamma prior distributions:
 
 $$ \pi(\alpha) \propto \alpha^{\ a-1}exp(-\alpha\ b) $$
-$$ \pi(\beta) \propto \beta^{\ c-1}exp(-\beta\ d) $$
+$$ \pi_{1}(\beta) \propto \beta^{\ c-1}exp(-\beta\ d) $$
 
-### Lindley (1980) numerical approximation approach
+The parameters $a, b, c, d$ are assumed to be known and greater than zero based on a prior information available that fits the gamma distribution which is mainly subjective to the investigator. When $a = b = c = d = 0$, then we have non informative priors.
 
-### Tierney & Kadane (1986) numerical approximation approahc
+let $[L_{i}\ ,\ R_{i}]$ denote the interval censored data and $T$ represent the unknown time, i.e. $L_{i} \leq T_{i} \leq R_{i}$, where $L_{i}$ is the last inspection time, $R_{i}$ the state end time.
+
+If censoring occurs non-informatively and if the law governing $L_{i}$ and $R_{i}$ doesn't involve any of the parameters of interest / independent of $\alpha$ and $\beta$, we can base our inferences on the likelihood function $L(\alpha,\ \beta;\ L_{i},\ R_{i})$
+
+$$ L(L_{i},\ R_{i} \mid \alpha,\ \beta)= \prod_{i=1}^n \big[F(R_{i}, \alpha, \beta)\ - F(L_{i}, \alpha, \beta) \big] $$
+
+we suppose $[L_{i}, R_{i}]$ is a random sample from loglogistic($\alpha,\ \beta$), then the observed data are given as
+
+$$ L(L_{i},\ R_{i} \mid \alpha,\ \beta) = \prod_{i=1}^n \Bigg( \frac{1}{\big[1+(\frac{L_{i}}{\alpha})^{-\beta}\big]} - \frac{1}{\big[1+(\frac{R_{i}}{\alpha})^{-\beta}\big]} \Bigg)$$
+Taking natural log, we get 
+
+$$ l(data \mid \alpha, \beta) = \sum_{i=1}^n ln \Bigg( \frac{1}{\big[1+(\frac{L_{i}}{\alpha})^{-\beta}\big]} - \frac{1}{\big[1+(\frac{R_{i}}{\alpha})^{-\beta}\big]} \Bigg) $$
+
+the joint density function of the data, $\alpha$ and $\beta$ can be obtained as 
+
+$$ \pi(\alpha,\ \beta,\ L_{i},\ R_{i}) \propto l(data \mid \alpha,\ \beta) \pi(\alpha)\pi_{1}(\beta) $$
+
+the posterior density function of $\alpha$ and $\beta$ given the data under squared error loss function, $u(\alpha,\ \beta)$ is 
+
+$$ \pi^{*}(\alpha,\ \beta,\ L_{i},\ R_{i}) = \frac{\int_0^\infty \int_0^\infty u(\alpha,\ \beta)\ \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta}{\int_0^\infty \int_0^\infty  \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta} $$
+
+The integral is difficult to compute analytically, hence we use two numerical apporximations suggested by Lindley and Tierney & Kadane to estimate the parameters.
+
+### Lindley (1980) numerical approximation approachs
+
+To approximate the ratio of integrals in Equation 7, Lindley proposed the following
+
+posterior SELF-Bayes estimator of an arbitrary function $u(\delta)$ is
+
+\[
+E((\theta) \mid x) = \frac{\int w(\theta)\, exp[l(\theta)]\, d\theta}{\int v(\theta)\, exp[l(\theta)]\, d\theta}
+\]
+
+where $l(\theta)$ is the log-likelihood and $w(\theta),\ v(\theta)$ are arbitrary functions of $\theta$. $v(\theta)$ is the prior distribution for $\theta$ and $w(\theta) = u(\theta).v(\theta)$. $u(\theta)$ being the function of interest.
+
+then the above posterior expectation for $u(\theta)$ can be shown as
+
+\[ 
+E\big(u(\theta) \mid t \big) = \frac{\int u(\theta)\, exp[l(\theta) + \rho(\theta)] d\theta}{\int exp[l(\theta) + \rho(\theta)] d\theta}
+\]
+
+where $\rho(\theta) = log[v(\theta)]$
+
+we will approximate the $E\big(u(\theta) \mid t \big)$ asymptotically by
+
+\[
+E\big(u(\theta) \mid t \big) = \Big[u + \frac{1}{2} \sum_i \sum_j (u_{ij} + 2u_{i}\rho_{j})\, \delta_{ij} + \frac{1}{2} \sum_i \sum_j \sum_k \sum_l l_{ijk}\, \delta_{ij}\, \delta_{kl}\, u_l \Big]
+\]
+
+where $i, j, k, l = 1,2, \dots, n$ and $\theta = (\theta_1, \theta_2, \dots, \theta_m)$ is the vector of the unknow model parameters
+
+the approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as below
+\[
+\hat{\alpha} = \hat{\alpha} + 0.5(u_{11}\, \delta_{11}) + (u_1\, \rho_1\, \delta_{11}) + 0.5(l_{30}\, u_1\, (\delta_{11})^2)\\
+\hat{\beta} = \hat{\beta} + 0.5(u_{22}\, \delta_{22}) + (u_2\, \rho_2\, \delta_{22}) + 0.5(l_{03}\, u_2\, (\delta_{22})^2)
+\]
+
+### Tierney & Kadane (1986) numerical approximation approach
+
+
+
+
