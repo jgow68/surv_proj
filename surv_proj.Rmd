@@ -2,10 +2,9 @@
 title: Summary of Bayesian statistical inference of the loglogistic model with interval-censored
   lifetime data
 output:
-  html_document: default
   pdf_document: default
-header includes:
-  - \usepackage{amsmath, amsthm, amssymb}
+  html_document: default
+header includes: \usepackage{amsmath, amsthm, amssymb}
 ---
 
 ```{r setup, include=FALSE}
@@ -60,6 +59,8 @@ $$ \pi(\alpha,\ \beta,\ L_{i},\ R_{i}) \propto l(data \mid \alpha,\ \beta) \pi(\
 
 the posterior density function of $\alpha$ and $\beta$ given the data under squared error loss function, $u(\alpha,\ \beta)$ is 
 
+Let $\delta = (\alpha, \beta)$ then the squared error loss function $L(\delta, \hat{\delta}) = (\delta - \hat{\delta})^2$
+
 $$ \pi^{*}(\alpha,\ \beta,\ L_{i},\ R_{i}) = \frac{\int_0^\infty \int_0^\infty u(\alpha,\ \beta)\ \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta}{\int_0^\infty \int_0^\infty  \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta} $$
 
 The integral is difficult to compute analytically, hence we use two numerical apporximations suggested by Lindley and Tierney & Kadane to estimate the parameters.
@@ -98,8 +99,42 @@ the approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error 
 \hat{\beta} = \hat{\beta} + 0.5(u_{22}\, \delta_{22}) + (u_2\, \rho_2\, \delta_{22}) + 0.5(l_{03}\, u_2\, (\delta_{22})^2)
 \]
 
+where
+\[
+\rho = ln\big(\pi(\alpha)\big) + ln\big(\pi_1(\beta)\big)\\
+\rho_1 = \frac{d\rho}{\alpha}= \frac{a-1}{\alpha} - b,\quad \rho_2 = \frac{d\rho}{\beta}= \frac{c-1}{\beta} - d\\
+u(\alpha)= \alpha,\quad u_1 = \frac{du}{d\alpha}=1,\quad u_{11}=\frac{d^2u}{d\alpha^2}\\
+u(\beta)= \beta,\quad u_2 = \frac{du}{d\beta}=1,\quad u_{22}=\frac{d^2u}{d\beta^2}
+\]
+
+Now if we let
+
+\[
+x=\bigg[1+\bigg(\frac{L_i}{\alpha}\bigg)^\beta \bigg],\quad y=\bigg[1+\bigg(\frac{R_i}{\alpha}\bigg)^\beta \bigg]\\
+\delta_{11}=(-l_{20})^{-1},\quad \delta_{22}=(-l_{02})^{-1}\quad where\\
+l_{20} = \frac{d^2l}{d\alpha^2},\quad l_{02}=\frac{d^2l}{d\beta^2}
+\]
+
+Then we can estimate the approximate Bayes estimator of $\hat{\alpha}$ and $\hat\beta$ accordingly
+
 ### Tierney & Kadane (1986) numerical approximation approach
 
+As Lindley's procedure requires to derive the thrid order derivative of the log likelihood function, we may consider an alternative by Tierney & Kadane which only requires the second order derivative for evaluating the ratio of integrals.
 
+we let $v(\alpha, \beta)$ be the prior distribution and $\pi(\alpha,\, \beta \mid L_i,\, R_i)$ be the posterior distribution of $\alpha$ and $\beta$. The Bayes estimate of a function $u(\alpha, \beta)$ under the squared error loss function is the posterior mean:
+
+\[
+E(u(\alpha,\, \beta \mid L_i,\,R_i)) = \frac{\int\int exp[nl^*(\alpha^*, \beta^*)])\, d\alpha\, d\beta}{\int\int exp[nl(\alpha, \beta)])\, d\alpha\, d\beta}
+\]
+
+where
+\[
+l(\alpha, \beta) = \frac{log\, v(\alpha, \beta) + l(\alpha, \beta; L_i, R_i)}{n}
+\]
+
+and 
+\[
+l^*(\alpha^*, \beta^*) = \frac{log\, v(\alpha, \beta) + log\, u(\alpha, \beta) + l(\alpha, \beta; L_i, R_i)}{n}
+\]
 
 
