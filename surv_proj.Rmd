@@ -183,3 +183,47 @@ The posterior Bayes Estimator, of a function $u = u(exp(-c\alpha), exp(-c\beta))
 \pi^*(\alpha, \beta \mid L_i, R_i) = \frac{\int \int u(exp(-c\alpha), exp(-c\beta)) \pi(\alpha, \beta,L_i, R_i)\, d\alpha\, d\beta}{\int \int \pi(\alpha, \beta, L_i, R_i)\, d\alpha\, d\beta}
 \]
 
+variable $c$ in function $u$ is the LINEX loss parameter. the parameters $\hat\alpha$ and $\hat\beta$ can be estimated similarly under the Lindley approximation with the following:
+
+\[
+u(\alpha) = e^{-c\alpha},\ u(\beta) = e^{-c\beta},\\
+u_1 = -ce^{-c\alpha},\ u_{11} = c^2e^{-c\alpha},\\
+u_2 = -ce^{-c\beta}, u_{22} = c^2e^{-c\beta}
+\]
+
+Under the Tierney & Kadane procedure, note
+\[
+l^*(\alpha^*, \beta^*) = l(\alpha, \beta) + \frac{1}{n} ln\,u(exp(-c\alpha),\ exp(-c\beta))
+\]
+
+### Maximum Likelihood Estimator
+
+We want to find the values of $\alpha$ and $\beta$ to maximise the log likehood equation:
+\[
+k(L_i, R_i \mid \alpha, \beta) = \sum_{i=1}^n ln\, \bigg( \frac{1}{1+(\frac{L_i}{\alpha})^\beta} - \frac{1}{1+(\frac{R_i}{\alpha})^\beta} \bigg)
+\]
+
+the maximum likelihood estimates of $\hat\alpha$ and $\hat\beta$ can be obtaned as the solution of the scores equations when $u(\alpha)$ and $u(\beta) = 0$. This can be solved by using numerical algorithm such as the Newton-Raphson algorithm, where $u(\alpha) = dl(L_i, R_i \mid \alpha, \beta)/d\alpha$ and $u(\beta) = dl(L_i, R_i \mid \alpha, \beta)/d\beta$
+
+\[
+\frac{dl}{d\beta} = \sum_{i=1}^n \Bigg( 
+\frac{-\frac{(\frac{L_i}{\alpha})^\beta ln(\frac{L_i}{\alpha})}
+{[1+(\frac{L_i}{\alpha})^\beta]^2} + 
+\frac{(\frac{R_i}{\alpha})^\beta ln(\frac{R_i}{\alpha})}
+{[1+(\frac{R_i}{\alpha})^\beta]^2}}
+{\frac{1}{[1+(\frac{L_i}{\alpha})^\beta]} - 
+\frac{1}{[1+(\frac{R_i}{\alpha})^\beta]}} 
+\Bigg) = 0
+\]
+
+\[
+\frac{dl}{d\alpha} = \sum_{i=1}^n \Bigg( 
+\frac{-\frac{(\frac{L_i}{\alpha})^\beta \beta}
+{[1+(\frac{L_i}{\alpha})^\beta]^2 \, \alpha} + 
+\frac{(\frac{R_i}{\alpha})^\beta \, \beta}
+{[1+(\frac{R_i}{\alpha})^\beta]^2 \, \alpha}}
+{\frac{1}{[1+(\frac{L_i}{\alpha})^\beta]} - 
+\frac{1}{[1+(\frac{R_i}{\alpha})^\beta]}} 
+\Bigg) = 0
+\]
+
