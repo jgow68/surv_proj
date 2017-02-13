@@ -137,4 +137,49 @@ and
 l^*(\alpha^*, \beta^*) = \frac{log\, v(\alpha, \beta) + log\, u(\alpha, \beta) + l(\alpha, \beta; L_i, R_i)}{n}
 \]
 
+the Bayes estimator with respect to $u(\alpha, \beta)$ is:
+
+\[
+\begin{align}
+E(u(\alpha, \beta) \mid L_i,\ R_i) &= \Bigg[\frac{\mid D^* \mid}{\mid D \mid} \Bigg]^{1/2} exp\{n[l^*(\alpha^*,\beta^*) - l(\alpha, \beta) \}\\
+&= \Bigg[\frac{\mid D^* \mid}{\mid D \mid} \Bigg]^{1/2} \frac{u(\alpha^*\beta^*)\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid L_i, R_i)}
+\end{align}
+\]
+
+where $(\alpha^*, \beta^*)$ and $(\alpha, \beta)$ maximise $l^*(\alpha^*, \beta^*)$ and $l(\alpha, \beta)$ respectively, and $D^*$ and $D$ are the negatives of the inverse Hessians of $l^*$ and $l$ respectively.
+
+The determinant of the negative of the inverse Hessians of $l(\alpha, \beta)$ and $l^*(\alpha^*, \beta^*)$ at $(\hat\alpha, \hat\beta)$ and $(\hat\alpha^*, \hat\beta^*)$ are :
+
+\[
+\mid D \mid\ = \bigg( \frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2  \bigg) ^{-1}, \\
+\mid D^* \mid\ = \bigg( \frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2  \bigg) ^{-1}
+\]
+
+Now we know
+\[
+l(\alpha, \beta) = \frac{1}{n} \Bigg[ (a-1)ln(\alpha)- b\alpha + (c-1) ln(\beta) - d\beta + \sum_i^n ln \bigg( \frac{1}{1+(\frac{L_i}{\alpha})^\beta} + \frac{1}{1+(\frac{R_i}{\alpha})^\beta} \bigg) \Bigg] \\
+l^*(\alpha, \beta) = l(\alpha, \beta) + \frac{1}{n} ln\, u(\alpha, \beta)
+\]
+
+Hence we can work out the determinant of  the two negative inverse Hessians $D$ and $D^*$ to obtain the Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function as follows:
+
+\[
+\hat{\alpha} = \Bigg( \frac{\frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2}{\frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2} \Bigg)^{1/2} \frac{\alpha^*\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid, L_i, R_i)}\\
+
+\hat{\beta} = \Bigg( \frac{\frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2}{\frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2} \Bigg)^{1/2} \frac{\beta^*\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid, L_i, R_i)}
+\]
+
+### Linear exponential loss function
+
+Bayes estimator of $\theta$ under LINEX loss function can be expressed as
+\[
+\hat\theta = - \frac{1}{c} ln\, E_\theta\{ exp(-c\theta\}
+\]
+
+provided that $E_\theta(.)$ exists and is finite.
+
+The posterior Bayes Estimator, of a function $u = u(exp(-c\alpha), exp(-c\beta))$ under the LINEX loss function is 
+\[
+\pi^*(\alpha, \beta \mid L_i, R_i) = \frac{\int \int u(exp(-c\alpha), exp(-c\beta)) \pi(\alpha, \beta,L_i, R_i)\, d\alpha\, d\beta}{\int \int \pi(\alpha, \beta, L_i, R_i)\, d\alpha\, d\beta}
+\]
 
