@@ -2,8 +2,8 @@
 title: Summary of Bayesian statistical inference of the loglogistic model with interval-censored
   lifetime data
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 header includes: \usepackage{amsmath, amsthm, amssymb}
 ---
 
@@ -100,11 +100,17 @@ the approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error 
 \]
 
 where
+
 \[
 \rho = ln\big(\pi(\alpha)\big) + ln\big(\pi_1(\beta)\big)\\
 \rho_1 = \frac{d\rho}{\alpha}= \frac{a-1}{\alpha} - b,\quad \rho_2 = \frac{d\rho}{\beta}= \frac{c-1}{\beta} - d\\
-u(\alpha)= \alpha,\quad u_1 = \frac{du}{d\alpha}=1,\quad u_{11}=\frac{d^2u}{d\alpha^2}\\
-u(\beta)= \beta,\quad u_2 = \frac{du}{d\beta}=1,\quad u_{22}=\frac{d^2u}{d\beta^2}
+\]
+
+\[
+\begin{align}
+u(\alpha) &= \alpha,\quad & u_1 &= \frac{du}{d\alpha}=1,\quad & u_{11}&=\frac{d^2u}{d\alpha^2}\\
+u(\beta) &= \beta,\quad & u_2 &= \frac{du}{d\beta}=1,\quad & u_{22}&=\frac{d^2u}{d\beta^2}
+\end{align}
 \]
 
 Now if we let
@@ -226,4 +232,30 @@ the maximum likelihood estimates of $\hat\alpha$ and $\hat\beta$ can be obtaned 
 \frac{1}{[1+(\frac{R_i}{\alpha})^\beta]}} 
 \Bigg) = 0
 \]
+
+we can evaluate MLE of $\hat\theta$ with a trial value $\theta_0$ using a first order Taylor series
+\[
+u(\hat\theta \approx u(\theta_0) + \frac{du(\theta)}{d\theta}(\hat\theta - \theta_0)
+\]
+
+let $H$ denote the Hessian matrix, then
+\[
+H(\theta) = \frac{d^2l}{d\theta d\theta^'}
+\]
+
+when we set $u(\hat\theta) = 0$ and solve for $\hat\theta$, we get
+\[
+\hat\theta = \theta_0 - H^{-1}(\theta_0)\, u(\theta_0)
+\]
+
+where $u(\theta_0)$ is the score vector.
+
+The Hessian matrix can be obtained through the $\frac{d^2l}{d\alpha^2},\ \frac{d^2l}{d\beta^2}$ or $\frac{d^2l}{d\alpha\, d\beta}$
+
+### Simulation Study
+
+
+### Conclusion
+
+Limitation of this study is that when the interval data contain right observations as a special case, using Lindley or Tierney & Kadane approach may take longer to converge and in some cases not converge at all. This type of censoring can be considered in the future with Bayes using Markov Chain Monte Carlo.
 
