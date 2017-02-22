@@ -53,31 +53,33 @@ Taking natural log, we get
 
 $$ l(data \mid \alpha, \beta) = \sum_{i=1}^n ln \Bigg( \frac{1}{\big[1+(\frac{L_{i}}{\alpha})^{-\beta}\big]} - \frac{1}{\big[1+(\frac{R_{i}}{\alpha})^{-\beta}\big]} \Bigg) $$
 
-the joint density function of the data, $\alpha$ and $\beta$ can be obtained as 
+The joint density function of the data, $\alpha$ and $\beta$ can be obtained as 
 
 $$ \pi(\alpha,\ \beta,\ L_{i},\ R_{i}) \propto l(data \mid \alpha,\ \beta) \pi(\alpha)\pi_{1}(\beta) $$
 
-the posterior density function of $\alpha$ and $\beta$ given the data under squared error loss function, $u(\alpha,\ \beta)$ is 
+The posterior density function of $\alpha$ and $\beta$ given the data under squared error loss function, $u(\alpha,\ \beta)$ is 
 
-Let $\delta = (\alpha, \beta)$ then the squared error loss function $L(\delta, \hat{\delta}) = (\delta - \hat{\delta})^2$
 
 $$ \pi^{*}(\alpha,\ \beta,\ L_{i},\ R_{i}) = \frac{\int_0^\infty \int_0^\infty u(\alpha,\ \beta)\ \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta}{\int_0^\infty \int_0^\infty  \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta} $$
 
-The integral is difficult to compute analytically, hence we use two numerical apporximations suggested by Lindley and Tierney & Kadane to estimate the parameters.
+
+Note: Let $\delta = (\alpha, \beta)$ then the squared error loss function $L(\delta, \hat{\delta}) = (\delta - \hat{\delta})^2$
+
+The integral is difficult to compute analytically, hence we use two numerical apporximations suggested by Lindley (1980) and Tierney & Kadane (1986) to estimate the parameters.
 
 ### Lindley (1980) numerical approximation approachs
 
-To approximate the ratio of integrals in Equation 7, Lindley proposed the following
+To approximate the ratio of integrals in Equation (7), Lindley proposed the following:
 
-posterior SELF-Bayes estimator of an arbitrary function $u(\delta)$ is
+The posterior SELF-Bayes estimator of an arbitrary function $u(\delta)$ is
 
 \[
-E((\theta) \mid x) = \frac{\int w(\theta)\, exp[l(\theta)]\, d\theta}{\int v(\theta)\, exp[l(\theta)]\, d\theta}
+E\big((\theta) \mid x \big) = \frac{\int w(\theta)\, exp[l(\theta)]\, d\theta}{\int v(\theta)\, exp[l(\theta)]\, d\theta}
 \]
 
-where $l(\theta)$ is the log-likelihood and $w(\theta),\ v(\theta)$ are arbitrary functions of $\theta$. $v(\theta)$ is the prior distribution for $\theta$ and $w(\theta) = u(\theta).v(\theta)$. $u(\theta)$ being the function of interest.
+where $l(\theta)$ is the log-likelihood and $w(\theta),\ v(\theta)$ are arbitrary functions of $\theta$. $v(\theta)$ is the prior distribution for $\theta$ and $w(\theta) = u(\theta).v(\theta)$ where $u(\theta)$ is the function of interest.
 
-then the above posterior expectation for $u(\theta)$ can be shown as
+Then the above posterior expectation for $u(\theta)$ can be shown as
 
 \[ 
 E\big(u(\theta) \mid t \big) = \frac{\int u(\theta)\, exp[l(\theta) + \rho(\theta)] d\theta}{\int exp[l(\theta) + \rho(\theta)] d\theta}
@@ -85,17 +87,19 @@ E\big(u(\theta) \mid t \big) = \frac{\int u(\theta)\, exp[l(\theta) + \rho(\thet
 
 where $\rho(\theta) = log[v(\theta)]$
 
-we will approximate the $E\big(u(\theta) \mid t \big)$ asymptotically by
+We can approximate the $E\big(u(\theta) \mid t \big)$ asymptotically by
 
 \[
 E\big(u(\theta) \mid t \big) = \Big[u + \frac{1}{2} \sum_i \sum_j (u_{ij} + 2u_{i}\rho_{j})\, \delta_{ij} + \frac{1}{2} \sum_i \sum_j \sum_k \sum_l l_{ijk}\, \delta_{ij}\, \delta_{kl}\, u_l \Big]
 \]
 
-where $i, j, k, l = 1,2, \dots, n$ and $\theta = (\theta_1, \theta_2, \dots, \theta_m)$ is the vector of the unknow model parameters
+where $i, j, k, l = 1,2, \dots, n$ and $\theta = (\theta_1, \theta_2, \dots, \theta_m)$ is the vector of the unknown model parameters
 
-the approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as below
+The approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as below
+
 \[
 \hat{\alpha} = \hat{\alpha} + 0.5(u_{11}\, \delta_{11}) + (u_1\, \rho_1\, \delta_{11}) + 0.5(l_{30}\, u_1\, (\delta_{11})^2)\\
+
 \hat{\beta} = \hat{\beta} + 0.5(u_{22}\, \delta_{22}) + (u_2\, \rho_2\, \delta_{22}) + 0.5(l_{03}\, u_2\, (\delta_{22})^2)
 \]
 
@@ -107,10 +111,10 @@ where
 \]
 
 \[
-\begin{align}
+\begin{aligned}
 u(\alpha) &= \alpha,\quad & u_1 &= \frac{du}{d\alpha}=1,\quad & u_{11}&=\frac{d^2u}{d\alpha^2}\\
 u(\beta) &= \beta,\quad & u_2 &= \frac{du}{d\beta}=1,\quad & u_{22}&=\frac{d^2u}{d\beta^2}
-\end{align}
+\end{aligned}
 \]
 
 Now if we let
@@ -121,7 +125,7 @@ x=\bigg[1+\bigg(\frac{L_i}{\alpha}\bigg)^\beta \bigg],\quad y=\bigg[1+\bigg(\fra
 l_{20} = \frac{d^2l}{d\alpha^2},\quad l_{02}=\frac{d^2l}{d\beta^2}
 \]
 
-Then we can estimate the approximate Bayes estimator of $\hat{\alpha}$ and $\hat\beta$ accordingly
+Then we can estimate the approximate Bayes estimator of $\hat\alpha$ and $\hat\beta$ accordingly
 
 ### Tierney & Kadane (1986) numerical approximation approach
 
@@ -146,10 +150,10 @@ l^*(\alpha^*, \beta^*) = \frac{log\, v(\alpha, \beta) + log\, u(\alpha, \beta) +
 the Bayes estimator with respect to $u(\alpha, \beta)$ is:
 
 \[
-\begin{align}
+\begin{aligned}
 E(u(\alpha, \beta) \mid L_i,\ R_i) &= \Bigg[\frac{\mid D^* \mid}{\mid D \mid} \Bigg]^{1/2} exp\{n[l^*(\alpha^*,\beta^*) - l(\alpha, \beta) \}\\
 &= \Bigg[\frac{\mid D^* \mid}{\mid D \mid} \Bigg]^{1/2} \frac{u(\alpha^*\beta^*)\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid L_i, R_i)}
-\end{align}
+\end{aligned}
 \]
 
 where $(\alpha^*, \beta^*)$ and $(\alpha, \beta)$ maximise $l^*(\alpha^*, \beta^*)$ and $l(\alpha, \beta)$ respectively, and $D^*$ and $D$ are the negatives of the inverse Hessians of $l^*$ and $l$ respectively.
@@ -240,7 +244,7 @@ u(\hat\theta \approx u(\theta_0) + \frac{du(\theta)}{d\theta}(\hat\theta - \thet
 
 let $H$ denote the Hessian matrix, then
 \[
-H(\theta) = \frac{d^2l}{d\theta d\theta^'}
+H(\theta) = \frac{d^2 l}{d\theta\, d\theta^\prime}
 \]
 
 when we set $u(\hat\theta) = 0$ and solve for $\hat\theta$, we get
@@ -252,7 +256,6 @@ where $u(\theta_0)$ is the score vector.
 
 The Hessian matrix can be obtained through the $\frac{d^2l}{d\alpha^2},\ \frac{d^2l}{d\beta^2}$ or $\frac{d^2l}{d\alpha\, d\beta}$
 
-### Simulation Study
 
 
 ### Conclusion
