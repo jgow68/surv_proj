@@ -40,13 +40,13 @@ $$ \pi_{1}(\beta) \propto \beta^{\ c-1}exp(-\beta\ d) $$
 
 The parameters $a, b, c, d$ are assumed to be known and greater than zero based on a prior information available that fits the gamma distribution which is mainly subjective to the investigator. When $a = b = c = d = 0$, then we have non informative priors.
 
-let $[L_{i}\ ,\ R_{i}]$ denote the interval censored data and $T$ represent the unknown time, i.e. $L_{i} \leq T_{i} \leq R_{i}$, where $L_{i}$ is the last inspection time, $R_{i}$ the state end time.
+Let $[L_{i}\ ,\ R_{i}]$ denote the interval censored data and $T$ represent the unknown time, i.e. $L_{i} \leq T_{i} \leq R_{i}$, where $L_{i}$ is the last inspection time, $R_{i}$ the state end time.
 
-If censoring occurs non-informatively and if the law governing $L_{i}$ and $R_{i}$ doesn't involve any of the parameters of interest / independent of $\alpha$ and $\beta$, we can base our inferences on the likelihood function $L(\alpha,\ \beta;\ L_{i},\ R_{i})$
+If censoring occurs non-informatively and if the law governing $L_{i}$ and $R_{i}$ doesn't involve any of the parameters of interest, i.e. independent of $\alpha$ and $\beta$, we can base our inferences on the likelihood function $L(\alpha,\ \beta;\ L_{i},\ R_{i})$
 
 $$ L(L_{i},\ R_{i} \mid \alpha,\ \beta)= \prod_{i=1}^n \big[F(R_{i}, \alpha, \beta)\ - F(L_{i}, \alpha, \beta) \big] $$
 
-we suppose $[L_{i}, R_{i}]$ is a random sample from loglogistic($\alpha,\ \beta$), then the observed data are given as
+We suppose $[L_{i}, R_{i}]$ is a random sample from loglogistic($\alpha,\ \beta$), then the observed data are given as
 
 $$ L(L_{i},\ R_{i} \mid \alpha,\ \beta) = \prod_{i=1}^n \Bigg( \frac{1}{\big[1+(\frac{L_{i}}{\alpha})^{-\beta}\big]} - \frac{1}{\big[1+(\frac{R_{i}}{\alpha})^{-\beta}\big]} \Bigg)$$
 Taking natural log, we get 
@@ -60,18 +60,18 @@ $$ \pi(\alpha,\ \beta,\ L_{i},\ R_{i}) \propto l(data \mid \alpha,\ \beta) \pi(\
 The posterior density function of $\alpha$ and $\beta$ given the data under squared error loss function, $u(\alpha,\ \beta)$ is 
 
 
-$$ \pi^{*}(\alpha,\ \beta,\ L_{i},\ R_{i}) = \frac{\int_0^\infty \int_0^\infty u(\alpha,\ \beta)\ \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta}{\int_0^\infty \int_0^\infty  \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta} $$
+$$ \pi^{*}(\alpha,\ \beta, \mid L_{i},\ R_{i}) = \frac{\int_0^\infty \int_0^\infty u(\alpha,\ \beta)\ \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta}{\int_0^\infty \int_0^\infty  \pi(\alpha)\ \pi_{1}(\beta)\ l(data \mid \alpha, \beta) d\alpha\ d\beta} $$
 
 
 Note: Let $\delta = (\alpha, \beta)$ then the squared error loss function $L(\delta, \hat{\delta}) = (\delta - \hat{\delta})^2$
 
-The integral is difficult to compute analytically, hence we use two numerical apporximations suggested by Lindley (1980) and Tierney & Kadane (1986) to estimate the parameters.
+Since the integral is difficult to compute analytically, we will use two numerical apporximations suggested by Lindley (1980) and Tierney & Kadane (1986) to estimate the parameters.
 
 ### Lindley (1980) numerical approximation approachs
 
-To approximate the ratio of integrals in Equation (7), Lindley proposed the following:
+To approximate the ratio of integrals in Equation (7) $\pi^{*}(\alpha,\ \beta,\ L_{i},\ R_{i})$, Lindley proposed the following:
 
-The posterior SELF-Bayes estimator of an arbitrary function $u(\delta)$ is
+The posterior SELF-Bayes estimator of an arbitrary function $u(\theta)$ is
 
 \[
 E\big((\theta) \mid x \big) = \frac{\int w(\theta)\, exp[l(\theta)]\, d\theta}{\int v(\theta)\, exp[l(\theta)]\, d\theta}
@@ -95,46 +95,40 @@ E\big(u(\theta) \mid t \big) = \Big[u + \frac{1}{2} \sum_i \sum_j (u_{ij} + 2u_{
 
 where $i, j, k, l = 1,2, \dots, n$ and $\theta = (\theta_1, \theta_2, \dots, \theta_m)$ is the vector of the unknown model parameters
 
-The approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as below
+With the numerical approximation above, $E\big(u(\theta) \mid t \big)$, the approximate Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as below
 
 \[
 \hat{\alpha} = \hat{\alpha} + 0.5(u_{11}\, \delta_{11}) + (u_1\, \rho_1\, \delta_{11}) + 0.5(l_{30}\, u_1\, (\delta_{11})^2)\\
-
 \hat{\beta} = \hat{\beta} + 0.5(u_{22}\, \delta_{22}) + (u_2\, \rho_2\, \delta_{22}) + 0.5(l_{03}\, u_2\, (\delta_{22})^2)
 \]
 
 where
 
 \[
+\begin{aligned}
+u(\alpha) &= \alpha,\quad & u_1 &= \frac{du}{d\alpha}=1,\quad & u_{11}&=\frac{d^2u}{d\alpha^2}\\
+u(\beta) &= \beta,\quad & u_2 &= \frac{du}{d\beta}=1,\quad & u_{22}&=\frac{d^2u}{d\beta^2}\\
+\end{aligned}
+\]
+
+\[
+\delta_{11} = (-l_{20})^{-1},\quad  \delta_{22} = (-l_{02})^{-1}\quad\\
+l_{20} = \frac{d^2l}{d\alpha^2},\quad  l_{02}=\frac{d^2l}{d\beta^2},\quad l_{03}=\frac{d^3l}{d\beta^3}
+\]
+
+\[
 \rho = ln\big(\pi(\alpha)\big) + ln\big(\pi_1(\beta)\big)\\
 \rho_1 = \frac{d\rho}{\alpha}= \frac{a-1}{\alpha} - b,\quad \rho_2 = \frac{d\rho}{\beta}= \frac{c-1}{\beta} - d\\
 \]
 
-\[
-\begin{aligned}
-u(\alpha) &= \alpha,\quad & u_1 &= \frac{du}{d\alpha}=1,\quad & u_{11}&=\frac{d^2u}{d\alpha^2}\\
-u(\beta) &= \beta,\quad & u_2 &= \frac{du}{d\beta}=1,\quad & u_{22}&=\frac{d^2u}{d\beta^2}
-\end{aligned}
-\]
-
-Now if we let
-
-\[
-x=\bigg[1+\bigg(\frac{L_i}{\alpha}\bigg)^\beta \bigg],\quad y=\bigg[1+\bigg(\frac{R_i}{\alpha}\bigg)^\beta \bigg]\\
-\delta_{11}=(-l_{20})^{-1},\quad \delta_{22}=(-l_{02})^{-1}\quad where\\
-l_{20} = \frac{d^2l}{d\alpha^2},\quad l_{02}=\frac{d^2l}{d\beta^2}
-\]
-
-Then we can estimate the approximate Bayes estimator of $\hat\alpha$ and $\hat\beta$ accordingly
-
 ### Tierney & Kadane (1986) numerical approximation approach
 
-As Lindley's procedure requires to derive the thrid order derivative of the log likelihood function, we may consider an alternative by Tierney & Kadane which only requires the second order derivative for evaluating the ratio of integrals.
+As Lindley's procedure requires the thrid order derivative of the log likelihood function, we may consider a less computation intensive alternative by Tierney & Kadane, which only requires the second order derivative for evaluating the ratio of integrals.
 
-we let $v(\alpha, \beta)$ be the prior distribution and $\pi(\alpha,\, \beta \mid L_i,\, R_i)$ be the posterior distribution of $\alpha$ and $\beta$. The Bayes estimate of a function $u(\alpha, \beta)$ under the squared error loss function is the posterior mean:
+We let $v(\alpha, \beta)$ be the prior distribution and $\pi(\alpha,\, \beta \mid L_i,\, R_i)$ be the posterior distribution of $\alpha$ and $\beta$. The Bayes estimate of a function $u(\alpha, \beta)$ under the squared error loss function is the posterior mean:
 
 \[
-E(u(\alpha,\, \beta \mid L_i,\,R_i)) = \frac{\int\int exp[nl^*(\alpha^*, \beta^*)])\, d\alpha\, d\beta}{\int\int exp[nl(\alpha, \beta)])\, d\alpha\, d\beta}
+E(u(\alpha,\, \beta) \mid L_i,\,R_i) = \frac{\int\int exp[nl^*(\alpha^*, \beta^*)]\, d\alpha\, d\beta}{\int\int exp[nl(\alpha, \beta)]\, d\alpha\, d\beta}
 \]
 
 where
@@ -147,7 +141,7 @@ and
 l^*(\alpha^*, \beta^*) = \frac{log\, v(\alpha, \beta) + log\, u(\alpha, \beta) + l(\alpha, \beta; L_i, R_i)}{n}
 \]
 
-the Bayes estimator with respect to $u(\alpha, \beta)$ is:
+The Bayes estimator with respect to $u(\alpha, \beta)$ is:
 
 \[
 \begin{aligned}
@@ -158,42 +152,44 @@ E(u(\alpha, \beta) \mid L_i,\ R_i) &= \Bigg[\frac{\mid D^* \mid}{\mid D \mid} \B
 
 where $(\alpha^*, \beta^*)$ and $(\alpha, \beta)$ maximise $l^*(\alpha^*, \beta^*)$ and $l(\alpha, \beta)$ respectively, and $D^*$ and $D$ are the negatives of the inverse Hessians of $l^*$ and $l$ respectively.
 
-The determinant of the negative of the inverse Hessians of $l(\alpha, \beta)$ and $l^*(\alpha^*, \beta^*)$ at $(\hat\alpha, \hat\beta)$ and $(\hat\alpha^*, \hat\beta^*)$ are :
+The determinant of the negative of the inverse Hessians of $l(\alpha, \beta)$ and $l^*(\alpha^*, \beta^*)$ at $(\hat\alpha, \hat\beta)$ and $(\hat\alpha^*, \hat\beta^*)$ are:
 
 \[
-\mid D \mid\ = \bigg( \frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2  \bigg) ^{-1}, \\
-\mid D^* \mid\ = \bigg( \frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2  \bigg) ^{-1}
+\mid D \mid\ = \bigg( \frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - \big(\frac{d^2l}{d\alpha\, d\beta}\big)^2  \bigg) ^{-1}, \\
+\mid D^* \mid\ = \bigg( \frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - \big(\frac{d^2l^*}{d\alpha\, d\beta}\big)^2  \bigg) ^{-1}
 \]
 
-Now we know
+Note the log-likelihood functions of $l(\alpha, \beta)$ and $l^*(\alpha^*, \beta)^*$:
 \[
 l(\alpha, \beta) = \frac{1}{n} \Bigg[ (a-1)ln(\alpha)- b\alpha + (c-1) ln(\beta) - d\beta + \sum_i^n ln \bigg( \frac{1}{1+(\frac{L_i}{\alpha})^\beta} + \frac{1}{1+(\frac{R_i}{\alpha})^\beta} \bigg) \Bigg] \\
 l^*(\alpha, \beta) = l(\alpha, \beta) + \frac{1}{n} ln\, u(\alpha, \beta)
 \]
 
-Hence we can work out the determinant of  the two negative inverse Hessians $D$ and $D^*$ to obtain the Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function as follows:
+Using the method above, the Bayes estimator of $\alpha$ and $\beta$ under the squared error loss function can be summarised as follow:
 
 \[
 \hat{\alpha} = \Bigg( \frac{\frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2}{\frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2} \Bigg)^{1/2} \frac{\alpha^*\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid, L_i, R_i)}\\
-
 \hat{\beta} = \Bigg( \frac{\frac{d^2l}{d\alpha^2}\frac{d^2l}{d\beta^2} - (\frac{d^2l}{d\alpha\, d\beta})^2}{\frac{d^2l^*}{d\alpha^2}\frac{d^2l^*}{d\beta^2} - (\frac{d^2l^*}{d\alpha\, d\beta})^2} \Bigg)^{1/2} \frac{\beta^*\pi^*(\alpha^*, \beta^* \mid L_i, R_i)}{\pi(\alpha, \beta \mid, L_i, R_i)}
 \]
 
 ### Linear exponential loss function
 
-Bayes estimator of $\theta$ under LINEX loss function can be expressed as
+If a LINEX loss function is used, the Bayes estimator of $\theta$ can be expressed as:
 \[
 \hat\theta = - \frac{1}{c} ln\, E_\theta\{ exp(-c\theta\}
 \]
 
 provided that $E_\theta(.)$ exists and is finite.
 
-The posterior Bayes Estimator, of a function $u = u(exp(-c\alpha), exp(-c\beta))$ under the LINEX loss function is 
+The posterior Bayes Estimator, of a LINEX loss function $u = u(exp(-c\alpha), exp(-c\beta))$ is:
+
 \[
 \pi^*(\alpha, \beta \mid L_i, R_i) = \frac{\int \int u(exp(-c\alpha), exp(-c\beta)) \pi(\alpha, \beta,L_i, R_i)\, d\alpha\, d\beta}{\int \int \pi(\alpha, \beta, L_i, R_i)\, d\alpha\, d\beta}
 \]
 
-variable $c$ in function $u$ is the LINEX loss parameter. the parameters $\hat\alpha$ and $\hat\beta$ can be estimated similarly under the Lindley approximation with the following:
+where the variable $c$ in function $u(.)$ is the LINEX loss parameter. According to Calabria & Pulcini (1996), $c=\pm0.7$ is used.
+
+The parameters $\hat\alpha$ and $\hat\beta$ can be estimated similarly under the Lindley approximation with the following changes on $u(.)$:
 
 \[
 u(\alpha) = e^{-c\alpha},\ u(\beta) = e^{-c\beta},\\
@@ -201,33 +197,24 @@ u_1 = -ce^{-c\alpha},\ u_{11} = c^2e^{-c\alpha},\\
 u_2 = -ce^{-c\beta}, u_{22} = c^2e^{-c\beta}
 \]
 
-Under the Tierney & Kadane procedure, note
+Under the Tierney & Kadane procedure, only the $l^*(\alpha^*\beta^*)$ has $u(.)$ which can be expressed as:
+
 \[
 l^*(\alpha^*, \beta^*) = l(\alpha, \beta) + \frac{1}{n} ln\,u(exp(-c\alpha),\ exp(-c\beta))
 \]
 
 ### Maximum Likelihood Estimator
 
-We want to find the values of $\alpha$ and $\beta$ to maximise the log likehood equation:
+The MLE of $\alpha$ and $\beta$ is obtained by maximising the log likehood function below:
 \[
-k(L_i, R_i \mid \alpha, \beta) = \sum_{i=1}^n ln\, \bigg( \frac{1}{1+(\frac{L_i}{\alpha})^\beta} - \frac{1}{1+(\frac{R_i}{\alpha})^\beta} \bigg)
+l(L_i, R_i \mid \alpha, \beta) = \sum_{i=1}^n ln\, \bigg( \frac{1}{1+(\frac{L_i}{\alpha})^\beta} - \frac{1}{1+(\frac{R_i}{\alpha})^\beta} \bigg)
 \]
 
-the maximum likelihood estimates of $\hat\alpha$ and $\hat\beta$ can be obtaned as the solution of the scores equations when $u(\alpha)$ and $u(\beta) = 0$. This can be solved by using numerical algorithm such as the Newton-Raphson algorithm, where $u(\alpha) = dl(L_i, R_i \mid \alpha, \beta)/d\alpha$ and $u(\beta) = dl(L_i, R_i \mid \alpha, \beta)/d\beta$
+The maximum likelihood estimates of $\hat\alpha$ and $\hat\beta$ can be obtaned as the solution of the scores equations when $u(\alpha)$ and $u(\beta) = 0$. This can be solved by using numerical algorithm such as the Newton-Raphson algorithm, by solving:
 
 \[
-\frac{dl}{d\beta} = \sum_{i=1}^n \Bigg( 
-\frac{-\frac{(\frac{L_i}{\alpha})^\beta ln(\frac{L_i}{\alpha})}
-{[1+(\frac{L_i}{\alpha})^\beta]^2} + 
-\frac{(\frac{R_i}{\alpha})^\beta ln(\frac{R_i}{\alpha})}
-{[1+(\frac{R_i}{\alpha})^\beta]^2}}
-{\frac{1}{[1+(\frac{L_i}{\alpha})^\beta]} - 
-\frac{1}{[1+(\frac{R_i}{\alpha})^\beta]}} 
-\Bigg) = 0
-\]
-
-\[
-\frac{dl}{d\alpha} = \sum_{i=1}^n \Bigg( 
+u(\alpha) = \frac{dl(L_i, R_i \mid \alpha, \beta)}{d\alpha} =
+\sum_{i=1}^n \Bigg( 
 \frac{-\frac{(\frac{L_i}{\alpha})^\beta \beta}
 {[1+(\frac{L_i}{\alpha})^\beta]^2 \, \alpha} + 
 \frac{(\frac{R_i}{\alpha})^\beta \, \beta}
@@ -237,26 +224,37 @@ the maximum likelihood estimates of $\hat\alpha$ and $\hat\beta$ can be obtaned 
 \Bigg) = 0
 \]
 
-we can evaluate MLE of $\hat\theta$ with a trial value $\theta_0$ using a first order Taylor series
 \[
-u(\hat\theta \approx u(\theta_0) + \frac{du(\theta)}{d\theta}(\hat\theta - \theta_0)
+u(\beta) = \frac{dl(L_i, R_i \mid \alpha, \beta)}{d\beta} =
+\sum_{i=1}^n \Bigg( 
+\frac{-\frac{(\frac{L_i}{\alpha})^\beta ln(\frac{L_i}{\alpha})}
+{[1+(\frac{L_i}{\alpha})^\beta]^2} + 
+\frac{(\frac{R_i}{\alpha})^\beta ln(\frac{R_i}{\alpha})}
+{[1+(\frac{R_i}{\alpha})^\beta]^2}}
+{\frac{1}{[1+(\frac{L_i}{\alpha})^\beta]} - 
+\frac{1}{[1+(\frac{R_i}{\alpha})^\beta]}} 
+\Bigg) = 0
 \]
 
-let $H$ denote the Hessian matrix, then
+
+We can evaluate MLE of $\hat\theta$ with a trial value $\theta_0$ using a first order Taylor series:
+\[
+u(\hat\theta) \approx u(\theta_0) + \frac{du(\theta)}{d\theta}(\hat\theta - \theta_0)
+\]
+
+Let $H$ denote the Hessian matrix, then
 \[
 H(\theta) = \frac{d^2 l}{d\theta\, d\theta^\prime}
 \]
 
-when we set $u(\hat\theta) = 0$ and solve for $\hat\theta$, we get
+When we set $u(\hat\theta) = 0$ and solve for $\hat\theta$, we get
 \[
 \hat\theta = \theta_0 - H^{-1}(\theta_0)\, u(\theta_0)
 \]
 
 where $u(\theta_0)$ is the score vector.
 
-The Hessian matrix can be obtained through the $\frac{d^2l}{d\alpha^2},\ \frac{d^2l}{d\beta^2}$ or $\frac{d^2l}{d\alpha\, d\beta}$
-
-
+The Hessian matrix can be obtained with the numerical approximations of $\frac{d^2l}{d\alpha^2},\ \frac{d^2l}{d\beta^2}$ or $\frac{d^2l}{d\alpha\, d\beta}$
 
 ### Conclusion
 
