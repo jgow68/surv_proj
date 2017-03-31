@@ -3,6 +3,7 @@ title: "surv_proj2"
 author: "Lxy"
 date: "March 31, 2017"
 output: html_document
+header includes: \usepackage{amsmath, amsthm, amssymb}
 ---
 
 ```{r setup, include=FALSE}
@@ -11,19 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## summary
 
-the first project focuses on the 
+The first project focuses on employing numerical apporximations from Lindley (1980) and Tierney & Kadane (1986) on survival data which are considered interval-censored. We have considered only a parametric approach assuming the survival data follows a loglogistic distribution model.
 
-As for the second project, we will be looking at expanding the scope through the following: 
+For the second project, we will be looking at expanding the scope through the following: 
 1. Estimation of the Bayesian parameters with asymmetric loss functions
 2. Computational aspects of Bayesian parametric and non-parametric approach
 3. Implementation on methods for interval-censored data in R with package Icens and intcox
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Estimation of Bayesian parameters with asymmetric loss functions
