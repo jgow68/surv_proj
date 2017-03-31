@@ -20,3 +20,80 @@ For the second project, we will be looking at expanding the scope through the fo
 3. Implementation on methods for interval-censored data in R with package Icens and intcox
 
 ### Estimation of Bayesian parameters with asymmetric loss functions
+
+Asymmetric loss functions are used to reflect, in most situation of interest, overestimation of a parameter does not produce the same economic consequence as underestimation. both the non-informative prior and informative prior on the reliability level at a prefixed time value are considered.
+
+Bayes approach allows:
+* prior information on the parameters of the failure model to be incorporated into the inferential procedure
+* considerations on the economic consequences arising from the wrong point estimate to be incorporated into the estimation procedure by using an appropriate loss function
+
+Let \( t_1, t_1, \dots, t_m, t_{m+1}, \dots, t_n\) denote experimental data from a left-truncated exponential distribution, \( f(t) = \theta^{-1}exp[-(t-\eta)/\theta], \ t \geq \eta \geq 0;\ \theta \geq 0  \) collected under a randomly censored sampling with \(m\) items failed at \(t_1, t_2, \dots, t_m\) and \(n-m\) items functioning at \(t_{m+1}, \dots, t_n\).
+
+The likelihood function, give n the sample information is:
+\[
+l(\eta, \theta) = \theta^{-m} exp[-(X-n\eta)/\theta]
+\]
+where \(X = \sum_{i=1}^{n} t_i\) is the accumulated observed life
+
+### Posterior distribution
+When no prior information is known, the non-informative prior on \(\eta\) and \(\theta\) is
+\[g(\eta, \theta)  \propto 1/\theta \]
+
+### Asymmetric loss functions
+
+The loss function \(L(\hat{\alpha}, \alpha)\) provides a measure of financial consequences arising from a wrong estimate \(\hat{\alpha}\) of the unknow quantity \(\alpha\). the choice of the appropriate loss function depends on financial considerations and is independent from the estimation procedure.
+
+The LINEX loss function, introduced by Varian (1975), is one asymmetric loss function which rises approximately exponentially on one side of zero and approximately linearly on the other side.
+
+Under the assumption that the minimal loss occurs at \(\hat{\alpha} = \alpha\), the LINEX loss function can be expressed as:
+\[
+L_L(\tilde{\alpha}, \alpha) \propto exp[q(\tilde{\alpha}-\alpha)] - q(\tilde{\alpha}-\alpha) - 1, \qquad q \neq 0
+\]
+The sign of shape parameter \(q\) reflects the direction of the asymmetry, \(q>0\) if overestimation is more serious than underestimation. Magnitude of \(q\) reflects the degree of asymmetry. For small \(|q|\), the LINEX loss function is almost symmetric and nearly quadratic. The Bayes estimate under such a loss, say \(\hat{\alpha}^L\), is not far from the posterior mean.
+
+The posterior expectation of the LINEX loss function is 
+\[
+E_{\alpha}\{ L_L(\tilde{\alpha}, \alpha)\} \propto exp(q\tilde{\alpha})\ E_{\alpha} \{ exp(-q\alpha)\} - q(\tilde{\alpha} - E_\alpha\{\alpha\}) - 1
+\]
+where \(E_\alpha \{ f(\alpha)\}\) denotes the expectation of \(f(\alpha)\) with respect to the posterior density \(\pi(\alpha | data)\). The Bayes estimate \(\tilde{\alpha}\) that minimises the expectation above is 
+\[
+\tilde{\alpha}^L = - \frac{1}{q} ln \big( E_\alpha \{ exp(-q\alpha)\}\big)
+\]
+provided that \(E_\alpha \{ exp(-q\alpha)\) exists and is finite, Zellner (1986).
+
+Although the LINEX loss function is popular for the estimation of the location parameter, it appears to be not suittable for the estimation of the scale parameter and other quantities (Basu & Ebrahimi (1991) and Parsian & Sanjani Farsipour (1993)). Basu & Ebrahimi suggested the modified LINEX loss:
+\[
+L_M (\tilde{\alpha}, \alpha) \propto exp[q^\prime (\tilde{\alpha}/\alpha-1)] - q^\prime (\tilde{\alpha}/ \alpha -1) - 1 ]
+\]
+
+
+### Linear exponential loss function
+
+If a LINEX loss function is used, the Bayes estimator of $\theta$ can be expressed as:
+\[
+\hat\theta = - \frac{1}{c} ln\, E_\theta\{ exp(-c\theta\}
+\]
+
+provided that $E_\theta(.)$ exists and is finite.
+
+The posterior Bayes Estimator, of a LINEX loss function $u = u(exp(-c\alpha), exp(-c\beta))$ is:
+
+\[
+\pi^*(\alpha, \beta \mid L_i, R_i) = \frac{\int \int u(exp(-c\alpha), exp(-c\beta)) \pi(\alpha, \beta,L_i, R_i)\, d\alpha\, d\beta}{\int \int \pi(\alpha, \beta, L_i, R_i)\, d\alpha\, d\beta}
+\]
+
+where the variable $c$ in function $u(.)$ is the LINEX loss parameter. According to Calabria & Pulcini (1996), $c=\pm0.7$ is used.
+
+The parameters $\hat\alpha$ and $\hat\beta$ can be estimated similarly under the Lindley approximation with the following changes on $u(.)$:
+
+\[
+u(\alpha) = e^{-c\alpha},\ u(\beta) = e^{-c\beta},\\
+u_1 = -ce^{-c\alpha},\ u_{11} = c^2e^{-c\alpha},\\
+u_2 = -ce^{-c\beta}, u_{22} = c^2e^{-c\beta}
+\]
+
+Under the Tierney & Kadane procedure, only the $l^*(\alpha^*\beta^*)$ has $u(.)$ which can be expressed as:
+
+\[
+l^*(\alpha^*, \beta^*) = l(\alpha, \beta) + \frac{1}{n} ln\,u(exp(-c\alpha),\ exp(-c\beta))
+\]
