@@ -61,10 +61,61 @@ where \(E_\alpha \{ f(\alpha)\}\) denotes the expectation of \(f(\alpha)\) with 
 \]
 provided that \(E_\alpha \{ exp(-q\alpha)\) exists and is finite, Zellner (1986).
 
-Although the LINEX loss function is popular for the estimation of the location parameter, it appears to be not suittable for the estimation of the scale parameter and other quantities (Basu & Ebrahimi (1991) and Parsian & Sanjani Farsipour (1993)). Basu & Ebrahimi suggested the modified LINEX loss:
+Although the LINEX loss function is popular for the estimation of the location parameter, it appears to be not suitable for the estimation of the scale parameter and other quantities (Basu & Ebrahimi (1991) and Parsian & Sanjani Farsipour (1993)). Basu & Ebrahimi suggested the Modified LINEX loss:
 \[
 L_M (\tilde{\alpha}, \alpha) \propto exp[q^\prime (\tilde{\alpha}/\alpha-1)] - q^\prime (\tilde{\alpha}/ \alpha -1) - 1 ]
 \]
+and \(\tilde{\alpha}^M\) that minimises the modified loss function, is the solution of:
+\[
+E_\alpha\{ \alpha^{-1} exp(q^\prime \tilde{\alpha}^{\Lambda I} / \alpha) \} = exp(q^\prime) E_\alpha \{1/\alpha\}
+\]
+povided that all the expectations are finite.
+
+The Modified LINEX loss appears to be appropriate in the context of the stimation of \(\theta, \lambda, \rho, R(t_0) \) and \(t_{R_0}\). However the expectations  in the modified loss function cannot be solved analytically with respect to the posterior distributions. Thus \(\tilde{\alpha}^M\) cannot be given in a closed form.
+
+Another alternative to the Modififed LINEX is the General Entropy loss proposed by Calabria and Pulcini (1994a):
+\[
+L_E (\tilde{\alpha}, \alpha) \propto (\tilde{\alpha}/\alpha)^p - p\ ln(\tilde{\alpha}/\alpha) -1
+\]
+where the minimm occurs at \(\tilde{\alpha} = \alpha\)
+
+When \(p>0\), a postive error \( (\tilde\alpha > \alpha) \) causes more serious consequences than a negative error. The Bayes estimate of \(\alpha\) under the General Entropy loss is in a closed form:
+\[
+\tilde\alpha^E = [E_\alpha (\alpha^{-p})^{-1/p}]
+\]
+provided that \(E_\alpha(\alpha^{-p})\) exists and is finite.
+Some notes on the estimate above:
+* When \(p=1\), the Bayes estimate conicides with the Bayes estimate under the weighted squared-error loss function \( (\tilde\alpha-\alpha)^2/ \alpha\)
+* When \( p=-1 \), the Bayes estimate coincides with the Bayes estimate under the Squared Error loss function
+
+To choose the appropriate value of the shape parameter of the selected loss function so that the asymmetry of the loss function reflects the practical situation, the following is proposed:
+* when the selected function is the LINEX loss, the value \(q\) is chosen to satisfy
+\[
+\frac{L_L(\alpha + \Delta, \alpha)}{L_L(\alpha - \Delta, \alpha)} = r, \quad \Delta > 0
+\]
+where \(r\) is the value of the ratio of the loss for overestimation and the loss for underestimation.
+
+* If the selected function is the Modified LINEX loss or the General Entrophy loss, then we search for the value \(q\prime\) or \(p\) that satisfies
+\[
+\frac{L(\alpha \cdot \delta, \alpha)}{L_L(\alpha/\delta, \alpha)} = r, \quad \delta > 1
+\]
+where the \(r\) is the value of the ratio of the loss for an overestimation of \(\delta\) times and the loss for an underestimation of \(1/\delta\) times.
+
+### Comparison of Bayes estimates
+
+Taking expectation over all possible outcomes of the experiment with the unknown random loss \(L(\tilde\alpha, \alpha)\) , the risk function of \(\tilde\alpha\) can be obtained as
+\[
+RF(\tilde\alpha) = E\{L(\tilde\alpha, \alpha\} = \int L(\tilde\alpha, \alpha) \cdot f(\tilde\alpha)\ d\tilde\alpha
+\]
+The risk function can be used as an measure of robustness of the Bayes procedure with respect to a wrong choice of the prior distribution or for comparison against classical estimators, i.e. Maximum Likelihood (ML).
+
+The Bayes estimator can be compared to ML estimators in terms of "Relative Efficiency", defined as the raio of the risk function of the ML estimator to the risk function of the corresponding Bayes estimator. Relative Efficiencies greater than 1 are favourable to the Bayes procedure.
+
+Based on the simulation results by Calabria & Pulcini (1996), Bayes estimators based on both non-informative or informative priors are more efficient than ML ones. The result regarding non-informative procedure is expected as the Bayes approach provides point estimators based on the loss function whereas the ML method does not incorporate it.
+
+The informative procedure appears to be quite robust even with wrong prior densities. The relative efficieny of the Bayes estimators under the informative prior is larger than of the non-informative prior, regardless of the accuracy of prior information.
+
+
 
 
 ### Linear exponential loss function
