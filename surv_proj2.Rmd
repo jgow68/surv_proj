@@ -10,7 +10,7 @@ header includes: \usepackage{amsmath, amsthm, amssymb}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## summary
+## Summary
 
 The first project focuses on employing numerical apporximations from Lindley (1980) and Tierney & Kadane (1986) on survival data which are considered interval-censored. We have considered only a parametric approach assuming the survival data follows a loglogistic distribution model.
 
@@ -20,6 +20,7 @@ For the second project, we will be looking at expanding the scope through the fo
 3. Implementation on methods for interval-censored data in R with package Icens and intcox
 
 ### Estimation of Bayesian parameters with asymmetric loss functions
+Refer to: Calabria & Pulcini (1996)
 
 Asymmetric loss functions are used to reflect, in most situation of interest, overestimation of a parameter does not produce the same economic consequence as underestimation. both the non-informative prior and informative prior on the reliability level at a prefixed time value are considered.
 
@@ -115,10 +116,8 @@ Based on the simulation results by Calabria & Pulcini (1996), Bayes estimators b
 
 The informative procedure appears to be quite robust even with wrong prior densities. The relative efficieny of the Bayes estimators under the informative prior is larger than of the non-informative prior, regardless of the accuracy of prior information.
 
-
-
-
 ### Linear exponential loss function
+Refer to: Chris Bambey Guure et al. (2015)
 
 If a LINEX loss function is used, the Bayes estimator of $\theta$ can be expressed as:
 \[
@@ -148,3 +147,97 @@ Under the Tierney & Kadane procedure, only the $l^*(\alpha^*\beta^*)$ has $u(.)$
 \[
 l^*(\alpha^*, \beta^*) = l(\alpha, \beta) + \frac{1}{n} ln\,u(exp(-c\alpha),\ exp(-c\beta))
 \]
+
+## Uncertainty in repeated measurement of a small non-negative quantity
+refer to: Response from the Analytical Method Committee's (AMC) to Willink's paper 'Uncertatinty in repeated measurement of a small non-negative quantity: explanation and discussion of Bayesian methodology' (2010)
+
+It was stated that neither the Bayesisan nor the frequentits frameworks provides a unique 95% CI. In the Bayesian approach, any interval that includes 95% of the posterior probability may be taken as a 95% CI. In the frequentist approach, any interval with 95% coverage probability will qualify. Here the frequentist CI is based on Student's t, repeated or discarded when the netire interval is below zero.
+
+Some strengths and weaknesses of the two approaches:
+
+\begin{tabular}{ c c c }
+Content & Frequentist & Bayesian maximum density \\
+Coverage properties & Conservative, coverage is always at least 95%, but rises to 97.5% when the true value is near zero &  Average coverage is 95%, but coverage near zero varies a little from 95% in both directions \\
+Interval width & reduces to zero at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & always positive, even when the measure value is negative \\
+Calculation procedure & Simple, using \(t\)-tables, with decision point at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & Requires spreadsheet or statistical software
+\end{tabular}
+
+In  general, the Bayesian maximum density interval will offer advantages in the 'common sense' size of the interval at the expense of more complex computation than the frequentist interval.
+
+## Nonparametric Bayesian estimation from interval censored data using Monte Carlo methods
+refer to: Calle & Gomez (2001)
+
+Calle & Gomez (2001) proposed to expand the usage of Susarla & Van Ryzin (1976) estimator for interval censoring scheme by using Markov Chain Monte Carlo methods. Note: Susarla & Van Ryzin derived the nonparametric Bayesian estimator of the survival function for right-censored data, based on the calss of Dirichlet proccesses introudced by Ferguson (1973).
+
+The proposed Bayesian estimator can be interpreted as a way of 'shrinking' Turnbull's nonparametric estimator to a smooth parametric family.
+
+### Nonparametric Bayesian method
+
+Let \(T\) be a positive random variable representing the time until the cocurence of a certain event \(E\) with unknown survival function \(S\). Our goal is to estimate the random survival function \(S(t) = Pr(T>t)\) based on the interval-censored data and assuming a Dirichlet process as a prior distribution. \(\hat{S}(t) = E(S(t) | D)\) is proposed as a nonparametric estimator of \(S\) , where \(E\) denotes expectation with respect to the posterior distribution of the Dirichlet process. \(\hat{S}\) minimises the posterior expected lost
+\[
+L(\hat{S}, S) = \int_0^\infty (\hat{S}(t) - S(t))^2 dg(t)
+\]
+
+When data are uncensored, Ferguson (1973) showed that the nonparametric Bayesian estimator of the survival function can be expressed as a linear combination of the prior guess \(S_0\) and the emprical survival function \(S_n\):
+\[
+\hat{S}(t) = \frac{\beta}{\beta+n}S_0() + \frac{n}{\beta+n}S_n(t)
+\]
+where \(\beta\) is the parameter of the Dirichlet prior.
+
+Susarla & Van Ryzin (1976) derived the nonparametric Bayesian estimator for the survival function \(S(t)\) based on the right-censored data. Under a right censoring scheme, for each time \(t\) the exact number of obeservations that have failed until that time is known. However, this number of failures is unknown under an interval censoring scheme. Thus, a sample based approach is proposed, by deriving a sample from the posterior distribution of \(S(t_j),\ 1 \leq j \leq r\), where \(t_j\) is the partition induced by the endpoints of the censoring intervals.
+
+### Notation and prior distributions
+Let \(n\) interval-censored survival data denoted by \(D = \{[T_{L^i}, T_{R^i}],\ 1 \leq i \leq n\}\). \(T_{L^i}\) is the last observed time for the \(i\)th individual before the event \(E\) occured and \(T_{R^i}\) indicates the first time the event \(E\) has been observed.
+
+Assumed that there is some prior belief in the shape of the survival function by the parameter model \(S_0\). Then, we can express some uncertainty in the prior belief by assuming a Dirichlet process prior \(P\) around \(S_0\), with parameter measure \(\alpha\). The parameter function can be expressed as \(\alpha(t, +\infty) = \beta S_0(t)\), where \(\beta > 0\), representing the measure of faith in the prior guess \(S_0\).
+
+Let \(0 = t_0 < t_1 < \dots <t_r = +\infty\) be the partition of the real line induced by endpoints of the censoring interval in \(D\). Denote by \(w\), the vector whose \(j\)th component is \(w_j = Pr(T \in (t_{j-1}, t_j]) = S(t_{j-1}) - S(t_j)\).
+
+The joint density of \(w\) is given by the Dirichlet distribution
+\[
+g(\boldsymbol{w} | \alpha_1, \dots, \alpha_r) = \frac{\Gamma(\alpha_1, \dots, \alpha_r)}{\Gamma(\alpha_1) \dots \Gamma(\alpha_r)} \Bigg( \prod_{j=1}^{r-1} w_{j}^{\alpha_j - 1} \Bigg) \Bigg( 1 - \sum_{j=1}^{r-1} w_{j} \Bigg)^{\alpha_r-1}
+\]
+where \(\alpha_j = \beta(S_0(t_{j-1}) - S_0(t_j)\)
+
+For each individual \(i\), we have the potential survivla time \(T^i\) and the vector \(\boldsymbol{\delta_i} = (\delta_1^i, \dots ,\delta_r^i)\), where \(\delta_j^i = \boldsymbol{1} \{T^i \in (t_{j-1}, t_j] \}\). As the event of interest acan occur in one and only one of these intervals, the distribution of \(\boldsymbol{\delta}^i\) conditioned on \(\boldsymbol{w}\) is multinomial distribution of sample size 1,
+\[
+h(\boldsymbol{\delta}^i | \boldsymbol{w}) = \prod_{j=1}^r w_j^{\delta_j^i} \quad where \ \sum_{j=1}^r \delta_j^i = 1
+\]
+
+### Posterior and conditional distributions
+
+The sample from the posterior distribution of the vector \(\boldsymbol{w}\) given the data \(D\) can be obtained through the Gibbs sampler methodology. Since the posterior distribution of the vector \(\boldsymbol{w}\) given a sample from a Dirichlet process, only depends on the number of events, \(n_j\) that fall in \((t_{j-1}, t_j]\) and not on where they fall exactly (Doksum, 1974), they propose to derive the posterior distribution of \(\boldsymbol{w}\)  by introducing the vector \(\boldsymbol{n} = (n_1, \dots , n_r\) in the model as latent variable. Denote the posterior condition distribution of \(\boldsymbol{n}\) given \(\boldsymbol{w}\) by \([\boldsymbol{n} |(\boldsymbol{w}, D ]\) and the posterior conditional distribution of \(\boldsymbol{w}\) given \(\boldsymbol{n}\) by \([\boldsymbol{w} |(\boldsymbol{n}, D ]\).
+
+The two steps of the Gibbs algorithm for the \(l\)th iteration are simplified as follows:
+\begin{enumerate}
+\item Simulate \(\boldsymbol{n}^{(l)}\) from \([\boldsymbol{n} |(\boldsymbol{w}, D ]\) 
+\item Simulate \(\boldsymbol{w}^{(l+1)}\) from \([\boldsymbol{w} |(\boldsymbol{n}, D ]\)
+\end{enumerate}
+
+It was shown under rather weak conditions (Gelfand & Smith, 1990) that the Markovian sequence \((\boldsymbol{w}^{(l+1)}, \boldsymbol{n}^{(l)})\) converges to an equilibrium distribution that is the joint distribution of \((\boldsymbol{w},  \boldsymbol{n})\). After generating \(m\) samples from Gibbs sampling chains, we can approximate the marginal posterior distribution of \(\boldsymbol{w}\) by the empirical smapling distribution or by using the average of the posterior conditional distributions of \(\boldsymbol{w}\) given \(\boldsymbol{n}\).
+
+
+### Algorithm and implementation
+
+The algorithm consists on \(k\) successive simulations from the corresponding full conditional distributions
+\begin{enumerate}
+\item Initial values: Define the initial probabilities \(\boldsymbol{w}^{(0)} = (w_1^{(0)}, \dots, w_r^{(0)}) \)
+\item Update \(\boldsymbol{n}\): For each iteration \(l = 1, \dots, k\) and for each individual \(i=1, \dots, n\), generate \(\boldsymbol{\delta}^i\) from a truncated multinomial of sample size 1 and parameter \(\boldsymbol{w}^{(0)\). Compute \(n_j^{(0)} = \sum_{i=1}^n \delta_j^i\), the number of events in each interval \((t_{j-1}, t_j)\)
+\item Update \(\boldsymbol{w}\): Generate \(\boldsymbol{w}^{(1)} = (w_1^{(1)}, \dots, w_r^{(1)})\) from a Dirichlet distribution of parameter vector \((\alpha_1+n_1^{(0)}, \dots,  \alpha_r+n_r^{(0)})\)
+\item Replace \(\boldsymbol{w}^{(0)}\) by \(\boldsymbol{w}^{(1)}\) and return to Step 1. Repeat Steps 1 and 2 until convergence.
+\end{enumerate}
+
+Gelman & Rubin (1992) suggested to discard the first \(k_0\) iterations of each sequence to diminish the effect of the starting values.
+The choice of the prior guess, \(S_0(t)\) can be chosen by modeling the prior knowldege of the problem or following an empirical Bayesian approach. Rai et al. (1980) suggested to use \(\beta = \sqrt n\) as a consistent estimator for the precision parameter.
+
+### Discussion on the methods
+
+Bayesian approaches have the advantage of allowing incorporation of external knowledge about the process. This is important when the information provided by the data due to scarcity or heavy censoring. The proposed approach also produces a sample of posterior distribution of the parameter of interest, which can be extended to obtain other posterior estimates, i.e. posterior quantiles and  posterior hazard rates.
+
+The proposed approach only consider the number of events in each interval with the use of the Dirichlet process. However its use is not recommended in the approach based on the estimation of the hazard function (Sinha & Dey, 1997).
+
+Further extensions would include incorporating covariates and to fit the entire dat set into a single model. One possible approach that was suggested was using hierarchical Bayesian models (Lindley & Smith, 1972) with interval censoring patterns.
+
+
+
+
