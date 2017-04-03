@@ -238,6 +238,35 @@ The proposed approach only consider the number of events in each interval with t
 
 Further extensions would include incorporating covariates and to fit the entire dat set into a single model. One possible approach that was suggested was using hierarchical Bayesian models (Lindley & Smith, 1972) with interval censoring patterns.
 
+## Bayesian parametric approach
+refer to: Gomez, Calle & Oller (2004), Frequentist and Bayesian approaches for interval-censored data
 
+Let \(T_1, \dots, T_n\) be the potential times for the \(n\) individuals and denote \(D=\{[L_i, R_i],\ 1 \leq i \leq n \}\) as the observed censoring intervals. Assume \(T_1, \dots, T_n\) are independent and identically distributed with density function \(w(t; \theta)\). The likelihood function under noninformative assumption is given by 
+\[
+L(\theta \mid D) = \prod_{i=1}^n [W(R_i; \theta) - W(L_i; \theta)] = \prod_{i=1}^{n} \int_{L_i}^{R_i} w(u_i; \theta)\ du_i 
+\]
+where \(W(t; \theta) = Pr(T \leq t; \theta)\)
+
+By means of Bayes theroem and assuming a prior distribution \(p(\theta)\) for \(\theta\), the posterior distribution of \(\theta\) is given by
+\[
+p(\theta \mid D) = \frac{L(\theta \mid D) \cdot p(\theta)}{\int L(\theta \mid D) \cdot p(\theta)\ d\theta}
+\]
+
+The integral in the denominator usually is not in closed form and requires numerical methods to estimate. Smith * Roberts (1993) suggested to use the Gibbs sampler. The unobserved data are reintroduced in the model as further unknowns and this leads to more tractable solutions. The strategy of introducing additional or latent variables in the model is also called the data augmentation algorithm (Tanner & Wong, 1987).
+
+### Data augmentation method
+
+Let \(p(x)\) be the distribution of interest which does not have explicit form and is difficult to sample from. Let \(y\) be an additional variable, which is referred to as latent variable, so that we can sample from \(p(y \mid x)\) and  \(p(x \mid y) \). The data augmentation will sample iteratively from these two conditional distributions.
+\begin{enumerate}
+\item Given inital value \(x^{(0)}\), draw a value \(y^{(1)}\) from \(p(y \mid x^{(0)})\)
+\item With the value  \(y^{(1)}\), draw a value \(x^{(1)}\) from \(p(x \mid y^{(1)})\)
+\end{enumerate}
+
+Tanner & Wong (1987) proves that 
+
+
+
+
+## Methods for interval censored data and implementation in R
 
 
