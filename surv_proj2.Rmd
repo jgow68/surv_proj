@@ -148,21 +148,6 @@ Under the Tierney & Kadane procedure, only the $l^*(\alpha^*\beta^*)$ has $u(.)$
 l^*(\alpha^*, \beta^*) = l(\alpha, \beta) + \frac{1}{n} ln\,u(exp(-c\alpha),\ exp(-c\beta))
 \]
 
-## Uncertainty in repeated measurement of a small non-negative quantity
-refer to: Response from the Analytical Method Committee's (AMC) to Willink's paper 'Uncertatinty in repeated measurement of a small non-negative quantity: explanation and discussion of Bayesian methodology' (2010)
-
-It was stated that neither the Bayesisan nor the frequentits frameworks provides a unique 95% CI. In the Bayesian approach, any interval that includes 95% of the posterior probability may be taken as a 95% CI. In the frequentist approach, any interval with 95% coverage probability will qualify. Here the frequentist CI is based on Student's t, repeated or discarded when the netire interval is below zero.
-
-Some strengths and weaknesses of the two approaches:
-
-\begin{tabular}{ c c c }
-Content & Frequentist & Bayesian maximum density \\
-Coverage properties & Conservative, coverage is always at least 95%, but rises to 97.5% when the true value is near zero &  Average coverage is 95%, but coverage near zero varies a little from 95% in both directions \\
-Interval width & reduces to zero at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & always positive, even when the measure value is negative \\
-Calculation procedure & Simple, using \(t\)-tables, with decision point at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & Requires spreadsheet or statistical software
-\end{tabular}
-
-In  general, the Bayesian maximum density interval will offer advantages in the 'common sense' size of the interval at the expense of more complex computation than the frequentist interval.
 
 
 
@@ -223,10 +208,37 @@ where \(p(\beta)\) is the prior density for the regression parameter
 \item Update the value of \(\theta = g(x_i, \beta)\)
 \end{enumerate}
 
+## Illustration of hierarchical model
+Let \(T_i\) be the infection time interval censored in \([L_i, R_i]\). Denote covariate \(x_i\) where \(x_i = 0\) for heavily-treated group and \(x_i = 1\) for lightly treated group.
+\[
+\begin{align}
+\text{Stage 1:}\quad &T_i \sim log\ N(\mu_i, \sigma^2)\ \text{truncated in} [L_i, R_i]\\
+                     &\mu_i \sim \beta_0 + \beta_1 \cdot x_i \\
+\\
+\text{Stage 2:}\quad\ &\beta_0 \sim N(\alpha_0, \sigma_1^2) \\
+                      &\beta_1 \sim N(\alpha_1, \sigma_1^2) \\
+                      &\sigma^2 \sim IG(0.001, 0.001) \\
+\\                      
+\text{Stage 3:}\quad\ &\alpha_0 \sim N(0, 1.10^{-6}) \\
+                      &\sigma_0^2 \sim IG(0.001, 0.001) \\
+                      &\alpha_1 \sim N(0, 1.10^{-6}) \\
+                      &\sigma_1^2 \sim IG(0.001, 0.001)
+           
+\end{align}
+\]
+
+The observational model is specified in Stage 1, where each individual is assumed to be a log-normal model truncated in the censoring interval. The mean \(\mu_i\) is assumed to be equal to \(\beta_0\) for heavily treated group and dqualt to \(\beta_0 + \beta_1\) for lightly-treated group.
+
+The normal prior distributions for these parameters are specified in stage 2 and an inverse gamma distribution for the variance.
+
+In stage 3, the vague priors are specified for the hyperparameters.
+
 ## Nonparametric Bayesian estimation from interval censored data using Monte Carlo methods
 refer to: Calle & Gomez (2001)
 
-Susarla & Van Ryzin (1976) first derived the nonparametric Bayesian estimator of the survival function for right-censored data, based on the class of Dirichlet proccesses introudced by Ferguson (1973). However, the extension of their approach to more complext censoring situtations, i.e. interval censoring is not straightforward. Since the estimation of the survival curve cannot be acheived explicitly, computing intensive methods have been pursued. Doss (1994) propose a Gibbs sampling algorithm to deal with interval censoring based on the simulation of samples from the Dirichlet process.
+Susarla & Van Ryzin (1976) first derived the nonparametric Bayesian estimator of the survival function for right-censored data, based on the class of Dirichlet proccesses introudced by Ferguson (1973). They proved that their estimators are asympotically equivalent and has better small sample properties than Kaplan-Meir estimator (Rai et a, 1980).
+
+However, the extension of their approach to more complext censoring situtations, i.e. interval censoring is not straightforward. Since the estimation of the survival curve cannot be acheived explicitly, computing intensive methods can provide a solution. Doss (1994) propose a Gibbs sampling algorithm to deal with interval censoring based on the simulation of samples from the Dirichlet process.
 
 Calle & Gomez (2001) proposed to expand the usage of Susarla & Van Ryzin (1976) estimator for interval censoring scheme by using Markov Chain Monte Carlo methods and introducing latent count variables. The proposed Bayesian estimator can be interpreted as a way of 'shrinking' Turnbull's nonparametric estimator to a smooth parametric family.
 
@@ -239,7 +251,7 @@ L(\hat{S}, S) = \int_0^\infty (\hat{S}(t) - S(t))^2 dg(t)
 
 When data are uncensored, Ferguson (1973) showed that the nonparametric Bayesian estimator of the survival function can be expressed as a linear combination of the prior guess \(S_0\) and the emprical survival function \(S_n\):
 \[
-\hat{S}(t) = \frac{\beta}{\beta+n}S_0() + \frac{n}{\beta+n}S_n(t)
+\hat{S}(t) = \frac{\beta}{\beta+n}S_0(t) + \frac{n}{\beta+n}S_n(t)
 \]
 where \(\beta\) is the parameter of the Dirichlet prior.
 
@@ -297,6 +309,101 @@ The proposed approach only consider the number of events in each interval with t
 
 Further extensions would include incorporating covariates and to fit the entire dat set into a single model. One possible approach that was suggested was using hierarchical Bayesian models (Lindley & Smith, 1972) with interval censoring patterns.
 
+### Frequentist approach to nonparametric survival function estimation
+
+Refer to Zhigang & Jianguo, Interval Censoring, 2010
+Assumed non-informative interval censoring, i.e.
+\[
+P(T \leq t \mid L=l,\ R=r,\ L<T\leq R) = P(T \leq t \mid l < T \leq r)
+\]
+
+Let \(\{I_i\}_{i=1}^{n}\) where \(I_i = (L_i, R_i]\), the interval that containe the unobserved \(T\). Let \(\{t_j\}_{j=0}^{m+1}\) denote the unique ordered elements of \(\{0, \{L_i\}_{i=1}^{n},  \{R_i\}_{i=1}^{n}, \infty\}\), \(\alpha_{ij}\) is the indicator of the event \((t_{j-1}, t_j] \subseteq I_i \) and \(p_j = S(t_{j-1})-S(t_j)\).
+
+The likelihood function for \(\boldsymbol{p} = (p_1, \dots, p_{m+1})^\prime\) and is proportional to 
+\[
+L_s (p) = \prod_{i=1}^n \big[ S(L_i) - S(R_i) \big] = \prod_{i=1}^n \sum_{j=1}^{m+1} \alpha_{ij}\ p_j
+\]
+with the constraint 
+\(\sum_{j=1}^{m+1} p_j = 1\) and \(p_j \geq 0\ ,\ j=1, \dots\ , m+1\)
+
+There are several methods for maximising \(L_s (p) \) with respect to \(\boldsymbol{p}\).
+The first and simplest one is the self-consistency algorithm given in Turnbull (1976) based on
+\[
+\hat{S}(t) = \frac{1}{n} E \big[ \sum_{i=1}^n I(T_i > t) \mid \hat{S}, I_1, \dots, I_n \big]
+\]
+which is essentially an application of the EM algorithm (Dempster & Laird, 1977). By iterating the equation below till convergence, we can obtain \(\hat{S}\)
+\[
+p_j^{new} = \frac{1}{n} \sum_{i=1}^n \frac{\alpha_{ij}\ p_j^{old}}{\sum_{l=1}^{m+1} \alpha_{il}\ p_l^{old}}
+\]
+Drawback is the slow convergence rate.
+
+Second approach is to maximise \(L_S(\boldsymbol{p})\) through iterative convex minorant (ICM) algorithm introduced by Groeneboom & Wellner (1992) and improved by Jongbloed (1998), which converges faster than the self-consistency algorithm.
+
+Third approach is to use EM-ICM algorithm by Wellner & Zhan (1997), which is a hybrid of the two methods above and the fastest algorithm.
+
+The algorithms above may yield multiple solutions, i.e. the NPMLE (Nonparametric MLE) may not be unique. One sufficient condition for uniqueness is that the log-likelihood is strictly concave, i.e. Hessian \(H\) is strictly negative definite. We may also employ the Kuhn-Tucker conditions (Gentleman & Geyer, 1994) to check if the solutions are NPMLE, i.e.
+\[
+\sum_{j=1}^{m+1} p_j = 1 \\
+p_j \geq 0\ ,\ \mu_j\ p_j = 0\ ,\ \mu_j \geq 0 \\
+\frac{\partial}{\partial p_j} \Bigg\{ l(p) + \sum_{j=1}^{m+1} p_j (\mu_j - \mu_0)\Bigg\} = d_j + \mu_j - \mu_0 = 0 \\
+\text{for}\ j =1 , \dots, m+1\ \text{and}\ \mu_j\ \text{is the Lagrange multipliers}
+\]
+
+The difference between right censoring and interval censoring is that the NPMLE of a survival function based on a right censored data can be derived by Kaplan-Meier (KM) closed form estimate. Interval censoring induces many challengeing problems in large sample  studies as the use of counting process technique is quite difficult and the martingale theory cannot be applied.
+
+It has been shown that for interval-censored data, \(\hat{S}\) is strongly consistent (Yu & Wong, 2000).  However, \(\hat{S}(t)\) converges only in the rate of \(n^{1/3}\) and the limiting distribution is non-normal (Geskus & Groeneboom, 1999). This differs from the usual \(n^{1/2}\) convergence rate and the limiting normal distribution of KM estimate. 
+
+The R package Icens of Gentleman & Vandal (2008) covers the algorithms above to estimate NPMLE.
+
+### Frequentist approach to parametric models
+
+Using the same maximum likelihood function as the Bayes parametric approach, we have the following.
+
+Let \(T_1, \dots, T_n\) be the potential times for the \(n\) individuals and denote \(D=\{[L_i, R_i],\ 1 \leq i \leq n \}\) as the observed censoring intervals. Assume \(T_1, \dots, T_n\) are independent and identically distributed with density function \(w(t; \theta)\). The likelihood function under noninformative assumption is given by 
+\[
+L(\theta \mid D) = \prod_{i=1}^n [W(R_i; \theta) - W(L_i; \theta)] = \prod_{i=1}^{n} \int_{L_i}^{R_i} w(u_i; \theta)\ du_i 
+\]
+where \(W(t; \theta) = Pr(T \leq t; \theta)\)
+
+### Comparison between the parametric and nonparametric frequentist approach
+
+If there is scientific or empirical knowledge, the non-parametric approach may represent an important loss of efficiency, specially if the the variable is heavily censored. 
+
+Parametric assumptions are difficult to assess based on a censored sample. It involves the risk of deriving inconsistent estimators for the parameters of interest. If the parametric model does not fit suitably, it might lead to inaccurate conclusions.
+
+Parametric model has the advantage to describe different parameter based quantities, hazard function at different times.
+
+
 ## Methods for interval censored data and implementation in R
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Uncertainty in repeated measurement of a small non-negative quantity
+refer to: Response from the Analytical Method Committee's (AMC) to Willink's paper 'Uncertatinty in repeated measurement of a small non-negative quantity: explanation and discussion of Bayesian methodology' (2010)
+
+It was stated that neither the Bayesisan nor the frequentits frameworks provides a unique 95% CI. In the Bayesian approach, any interval that includes 95% of the posterior probability may be taken as a 95% CI. In the frequentist approach, any interval with 95% coverage probability will qualify. Here the frequentist CI is based on Student's t, repeated or discarded when the netire interval is below zero.
+
+Some strengths and weaknesses of the two approaches:
+
+\begin{tabular}{ c c c }
+Content & Frequentist & Bayesian maximum density \\
+Coverage properties & Conservative, coverage is always at least 95%, but rises to 97.5% when the true value is near zero &  Average coverage is 95%, but coverage near zero varies a little from 95% in both directions \\
+Interval width & reduces to zero at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & always positive, even when the measure value is negative \\
+Calculation procedure & Simple, using \(t\)-tables, with decision point at \(\bar{x} \sqrt{n}/s \leq -t_{\alpha/2}\) & Requires spreadsheet or statistical software
+\end{tabular}
+
+In  general, the Bayesian maximum density interval will offer advantages in the 'common sense' size of the interval at the expense of more complex computation than the frequentist interval.
